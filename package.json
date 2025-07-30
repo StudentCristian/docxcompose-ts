@@ -35,7 +35,9 @@
         "cspell": "cspell \"{src,demo,docs,scripts}/**/*.{ts,scss,html,md}\" && cspell \"./*.*\"",
         "serve.docs": "cd docs && docsify serve",
         "extract": "tsx scripts/extract-document.ts",
-        "run-ts": "tsx"
+        "run-ts": "tsx",
+        "demo:composer": "tsx src/compose/real-files-demo.ts",  
+        "test:demo": "vitest run src/compose/real-files-demo.spec.ts"
     },
     "pre-commit": [
         "prettier",
