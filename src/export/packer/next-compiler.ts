@@ -145,12 +145,12 @@ export class Compiler {
                         "fontTable.xml",
                     );
 
-                    return xml(
-                        this.formatter.format(file.Document.Relationships, {
-                            viewWrapper: file.Document,
-                            file,
-                            stack: [],
-                        }),
+                return xml(  
+                    this.formatter.format(file.Document.Relationships, {  
+                        viewWrapper: file.Document,  
+                        file,  
+                        stack: [],  
+                    }),  
                         {
                             indent: prettify,
                             declaration: {

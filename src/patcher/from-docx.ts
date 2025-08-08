@@ -17,6 +17,8 @@ import { appendContentType } from "./content-types-manager";
 import { appendRelationship, getNextRelationshipIndex } from "./relationship-manager";
 import { replacer } from "./replacer";
 import { toJson } from "./util";
+import { extractStylesFromDocx, extractStylesFromPatchElements, createStyleInfoFromPatchIds } from "./style-extractor";  
+import { StyleMapper } from "./style-mapper"; 
 
 // eslint-disable-next-line functional/prefer-readonly-type
 export type InputDataType = Buffer | string | number[] | Uint8Array | ArrayBuffer | Blob | NodeJS.ReadableStream | JSZip;
@@ -96,6 +98,9 @@ export const patchDocument = async <T extends PatchDocumentOutputType = PatchDoc
     } as unknown as File;
 
     const map = new Map<string, Element>();
+
+    const masterStyles = await extractStylesFromDocx(zipContent);  
+    const styleMapper = new StyleMapper();  
 
     // eslint-disable-next-line functional/prefer-readonly-type
     const imageRelationshipAdditions: IImageRelationshipAddition[] = [];
@@ -202,6 +207,16 @@ export const patchDocument = async <T extends PatchDocumentOutputType = PatchDoc
                         patchText,
                         context,
                         keepOriginalStyles,
+                        // MOVER EL MAPEO AQUÍ: Solo crear el mapeo cuando se va a usar  
+                        styleMapper: (() => {    
+                            const patchStyleIds = extractStylesFromPatchElements([...patchValue.children], context);    
+                            const patchStyles = createStyleInfoFromPatchIds(patchStyleIds);    
+                            styleMapper.createStyleIdMapping(patchStyles, masterStyles); // Usar la instancia existente  
+                            console.log(`Patch "${patchKey}": estilos encontrados:`, patchStyleIds);    
+                            console.log(`Mapeo creado:`, styleMapper.getMappingStats());    
+                            return styleMapper; // Retornar la instancia reutilizada  
+                        })(),
+
                     });
                     // What the reason doing that? Once document is patched - it search over patched json again, that takes too long if patched document has big and deep structure.
                     if (!recursive || !didFindOccurrence) {

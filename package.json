@@ -36,7 +36,7 @@
         "serve.docs": "cd docs && docsify serve",
         "extract": "tsx scripts/extract-document.ts",
         "run-ts": "tsx",
-        "demo:composer": "tsx src/compose/real-files-demo.ts",  
+        "demo:composer": "tsx src/compose/real-files-demo.ts",
         "test:demo": "vitest run src/compose/real-files-demo.spec.ts"
     },
     "pre-commit": [
@@ -100,6 +100,7 @@
         "jsdom": "^26.0.0",
         "pre-commit": "^1.2.2",
         "prettier": "^3.1.1",
+        "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.0.0",
         "tsx": "^4.7.0",
         "typedoc": "^0.28.2",
